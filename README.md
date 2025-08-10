@@ -1,8 +1,6 @@
 
 # mkdocs-jupyterlite
 
-![PyPI - Version](https://img.shields.io/pypi/v/mkdocs-jupyterlite)
-
 A MkDocs plugin that enables embedding interactive jupyterlite notebooks in your docs.
 
 Say you have a notebook `example.ipynb` in your awesome project, and you want
@@ -20,29 +18,51 @@ This plugin automates that process for you.
 
 ## Installation
 
-1. Install the plugin
+1. Install the plugin from [PyPI](https://pypi.org/project/mkdocs-jupyterlite/):
 
 ```bash
-pip install mkdocs-jupyterlite
+python -m pip install mkdocs-jupyterlite
 ```
 
 2. Configure in your `mkdocs.yml` file
 
+This is a minimal `mkdocs.yml` that configures [this project's site](https://nickcrews.github.io/mkdocs-jupyterlite):
+
 ```yaml
+site_name: mkdocs-jupyterlite
+site_url: https://nickcrews.github.io/mkdocs-jupyterlite/
+repo_url: https://github.com/nickcrews/mkdocs-jupyterlite/
+
+nav:
+  - Home: index.md
+  - Notebook 1: notebook.ipynb
+
 plugins:
-  - search
-  - mkdocstrings
-  - etc
   - jupyterlite:
       enabled: true
       notebook_patterns:
-        - "**/*.ipynb"
+        - '*.ipynb'
 ```
 
-This doesn't currently support installing custom python packages into the
-JupyterLite environment, but this should be possible to support in the future.
+### `enabled`
+
+bool, whether or not the plugin is enabled. Defaults to `true`.
+
+### `notebook_patterns`
+
+A list of glob patterns (using `fnmatch`) that match the notebook files to include.
+Defaults to `['**/*.ipynb']`.
+
+For all files that match, the content of the page will be an
+iframe that embeds the JupyterLite Notebook html.
 
 ## Contributing
 
 I want this to be usable for other people, so file an issue if you want
 to use this in your site, but run into any problems.
+
+Possible improvements:
+- Include custom python wheels into the JupyterLite environment.
+- Passing an entire jupyter-lite.json config file.
+- Instead of using an iframe, actually inline the contents of the generated HTML?
+- Fix the TOC so clicking headers actually scrolls in the iframe.

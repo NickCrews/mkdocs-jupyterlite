@@ -39,7 +39,7 @@ class NotebookFile(File):
 
 class JupyterlitePluginConfig(BaseConfig):
     enabled = OptionType(bool, default=True)
-    notebook_patterns = OptionType(list, default=[])
+    notebook_patterns = OptionType(list, default=["**/*.ipynb"])
 
 
 class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
