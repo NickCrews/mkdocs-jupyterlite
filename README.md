@@ -18,15 +18,16 @@ This plugin automates that process for you.
 
 ## Installation
 
-1. Install the plugin from [PyPI](https://pypi.org/project/mkdocs-jupyterlite/):
+### Step 1: Install the plugin from [PyPI](https://pypi.org/project/mkdocs-jupyterlite/):
 
 ```bash
 python -m pip install mkdocs-jupyterlite
 ```
 
-2. Configure in your `mkdocs.yml` file
+### Step 2: Configure your `mkdocs.yml` file
 
-This is a minimal `mkdocs.yml` that configures [this project's site](https://nickcrews.github.io/mkdocs-jupyterlite):
+See the [mkdocs.yml](https://github.com/NickCrews/mkdocs-jupyterlite/blob/main/mkdocs.yml)
+that configures [this project's site](https://nickcrews.github.io/mkdocs-jupyterlite).
 
 ```yaml
 site_name: mkdocs-jupyterlite

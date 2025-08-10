@@ -34,3 +34,6 @@ dev = [
 lint = [
     "ruff>=0.12.8",
 ]
+docs = [
+    "pymdown-extensions>=10.16.1",
+]

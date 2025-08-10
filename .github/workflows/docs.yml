@@ -25,4 +25,4 @@ jobs:
       - name: Install UV
         run: curl -LsSf https://astral.sh/uv/0.4.18/install.sh | sh
 
-      - run: uv run mkdocs gh-deploy
+      - run: uv run --group docs mkdocs gh-deploy

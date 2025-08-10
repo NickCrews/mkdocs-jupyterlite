@@ -6,6 +6,10 @@ nav:
   - Home: index.md
   - Notebook 1: notebook.ipynb
 
+markdown_extensions:
+  - pymdownx.snippets:
+      check_paths: true
+
 plugins:
   - jupyterlite:
       enabled: true
