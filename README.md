@@ -1,4 +1,7 @@
+
 # mkdocs-jupyterlite
+
+![PyPI - Version](https://img.shields.io/pypi/v/mkdocs-jupyterlite)
 
 A MkDocs plugin that enables embedding interactive jupyterlite notebooks in your docs.
 
@@ -38,3 +41,8 @@ plugins:
 
 This doesn't currently support installing custom python packages into the
 JupyterLite environment, but this should be possible to support in the future.
+
+## Contributing
+
+I want this to be usable for other people, so file an issue if you want
+to use this in your site, but run into any problems.
