@@ -1,0 +1,12 @@
+site_name: mkdocs-jupyterlite
+
+nav:
+  - Home: index.md
+  - Notebook 1: notebook.ipynb
+
+plugins:
+  - jupyterlite:
+      enabled: true
+      notebook_patterns:
+        - '*.ipynb'
+      pip_urls: []

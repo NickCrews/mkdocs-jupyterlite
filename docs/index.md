@@ -17,13 +17,13 @@ This plugin automates that process for you.
 
 ## Installation
 
-1. Install the plugin
+### Step 1: Install the `mkdocs-jupyterlite` package
 
 ```bash
 pip install mkdocs-jupyterlite
 ```
 
-2. Configure in your `mkdocs.yml` file
+### Step 2: Configure your `mkdocs.yml` file
 
 ```yaml
 plugins:
