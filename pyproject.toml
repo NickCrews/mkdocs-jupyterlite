@@ -18,7 +18,7 @@ Source = "https://github.com/NickCrews/mkdocs-jupyterlite"
 Tracker = "https://github.com/NickCrews/mkdocs-jupyterlite/issues"
 
 [project.entry-points."mkdocs.plugins"]
-marimo = "mkdocs_jupyterlite.plugin:JupyterlitePlugin"
+marimo = "mkdocs_jupyterlite:JupyterlitePlugin"
 
 [build-system]
 requires = ["hatchling"]

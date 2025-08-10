@@ -14,11 +14,10 @@ log = logging.getLogger("mkdocs.plugins.jupyterlite")
 
 class JupyterlitePluginConfig(BaseConfig):
     enabled = OptionType(bool, default=True)
+    notebook_paths = OptionType(str | list[str], default=[])
 
 
 class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
-    replacements: dict[str, list[str]] = {}
-
     def __init__(self):
         super().__init__()
         if isinstance(self.config, dict):
