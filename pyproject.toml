@@ -1,7 +1,7 @@
 [project]
 name = "mkdocs-jupyterlite"
 version = "0.1.0"
-description = "Add your description here"
+description = "Embed interactive JupyterLite notebooks in your MkDocs site."
 readme = "README.md"
 authors = [
     { name = "Nick Crews", email = "nicholas.b.crews@gmail.com" }
