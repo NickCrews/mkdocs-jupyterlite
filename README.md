@@ -34,6 +34,7 @@ plugins:
       enabled: true
       notebook_patterns:
         - "**/*.ipynb"
-      pip_urls:
-        - "https://pypi.org/simple"
 ```
+
+This doesn't currently support installing custom python packages into the
+JupyterLite environment, but this should be possible to support in the future.

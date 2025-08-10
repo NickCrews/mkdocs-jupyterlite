@@ -1,6 +1,6 @@
 # mkdocs-jupyterlite
 
-A MkDocs plugin that enables embedding interactive jupyterlite notebooks in your docs.
+A [MkDocs](https://www.mkdocs.org/) plugin for embedding interactive [JupyterLite](https://jupyterlite.readthedocs.io/) notebooks in your docs.
 
 Say you have a notebook `example.ipynb` in your awesome project, and you want
 users to be able to play around with it.
@@ -34,6 +34,17 @@ plugins:
       enabled: true
       notebook_patterns:
         - "**/*.ipynb"
-      pip_urls:
-        - "https://pypi.org/simple"
 ```
+
+This doesn't currently support installing custom python packages into the
+JupyterLite environment, but this should be possible to support in the future.
+
+## Related Work
+
+- [mkdocs-jupyter](https://github.com/danielfrg/mkdocs-jupyter):
+  A very similar plugin, but outputs a static, non-interactive representation of the notebook.
+- [jupyterlite-sphinx](https://github.com/jupyterlite/jupyterlite-sphinx):
+  A Sphinx extension for embedding JupyterLite notebooks in your Sphinx documentation site.
+  This is equivalent to this plugin, but for Sphinx instead of MkDocs.
+- [The inspiring issue in jupyterlite](https://github.com/jupyterlite/jupyterlite/issues/1690)
+  that caused me to create this plugin.

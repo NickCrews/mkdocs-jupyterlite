@@ -11,4 +11,3 @@ plugins:
       enabled: true
       notebook_patterns:
         - '*.ipynb'
-      pip_urls: []

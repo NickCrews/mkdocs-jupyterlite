@@ -40,7 +40,6 @@ class NotebookFile(File):
 class JupyterlitePluginConfig(BaseConfig):
     enabled = OptionType(bool, default=True)
     notebook_patterns = OptionType(list, default=[])
-    pip_urls = OptionType(list, default=[])
 
 
 class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
@@ -76,7 +75,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
         notebooks = [Path(config.docs_dir) / p for p in notebook_paths]
         _build.build_site(
             notebooks=notebooks,
-            pip_urls=self.config.pip_urls,
+            pip_urls=[],
             output_dir=Path(self._jupyterlite_build_dir.name),
         )
         return Files(outfiles)
