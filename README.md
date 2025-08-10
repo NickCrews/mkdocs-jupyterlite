@@ -45,6 +45,8 @@ plugins:
         - '*.ipynb'
 ```
 
+Here are the details on the configuration options:
+
 ### `enabled`
 
 bool, whether or not the plugin is enabled. Defaults to `true`.
@@ -63,6 +65,7 @@ I want this to be usable for other people, so file an issue if you want
 to use this in your site, but run into any problems.
 
 Possible improvements:
+
 - Include custom python wheels into the JupyterLite environment.
 - Passing an entire jupyter-lite.json config file.
 - Instead of using an iframe, actually inline the contents of the generated HTML?
