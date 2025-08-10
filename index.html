@@ -80,7 +80,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#related-work" class="nav-link">Related Work</a>
+            <li class="nav-item" data-bs-level="2"><a href="#contributing" class="nav-link">Contributing</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -92,7 +92,7 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="mkdocs-jupyterlite">mkdocs-jupyterlite</h1>
-<p>A <a href="https://www.mkdocs.org/">MkDocs</a> plugin for embedding interactive <a href="https://jupyterlite.readthedocs.io/">JupyterLite</a> notebooks in your docs.</p>
+<p>A MkDocs plugin that enables embedding interactive jupyterlite notebooks in your docs.</p>
 <p>Say you have a notebook <code>example.ipynb</code> in your awesome project, and you want
 users to be able to play around with it.
 In the past, you could use a tool like <a href="https://mybinder.org/">Binder</a> to achieve this.
@@ -104,31 +104,41 @@ then run a build step to package your notebooks, other files, and python
 dependencies into a single static site.</p>
 <p>This plugin automates that process for you.</p>
 <h2 id="installation">Installation</h2>
-<h3 id="step-1-install-the-mkdocs-jupyterlite-package">Step 1: Install the <code>mkdocs-jupyterlite</code> package</h3>
-<pre><code class="language-bash">pip install mkdocs-jupyterlite
+<h3 id="step-1-install-the-plugin-from-pypi">Step 1: Install the plugin from <a href="https://pypi.org/project/mkdocs-jupyterlite/">PyPI</a>:</h3>
+<pre><code class="language-bash">python -m pip install mkdocs-jupyterlite
 </code></pre>
 <h3 id="step-2-configure-your-mkdocsyml-file">Step 2: Configure your <code>mkdocs.yml</code> file</h3>
-<pre><code class="language-yaml">plugins:
-  - search
-  - mkdocstrings
-  - etc
+<p>See the <a href="https://github.com/NickCrews/mkdocs-jupyterlite/blob/main/mkdocs.yml">mkdocs.yml</a>
+that configures <a href="https://nickcrews.github.io/mkdocs-jupyterlite">this project's site</a>.</p>
+<pre><code class="language-yaml">site_name: mkdocs-jupyterlite
+site_url: https://nickcrews.github.io/mkdocs-jupyterlite/
+repo_url: https://github.com/nickcrews/mkdocs-jupyterlite/
+
+nav:
+  - Home: index.md
+  - Notebook 1: notebook.ipynb
+
+plugins:
   - jupyterlite:
       enabled: true
       notebook_patterns:
-        - &quot;**/*.ipynb&quot;
+        - '*.ipynb'
 </code></pre>
-<p>This doesn't currently support installing custom python packages into the
-JupyterLite environment, but this should be possible to support in the future.</p>
-<h2 id="related-work">Related Work</h2>
-<ul>
-<li><a href="https://github.com/danielfrg/mkdocs-jupyter">mkdocs-jupyter</a>:
-  A very similar plugin, but outputs a static, non-interactive representation of the notebook.</li>
-<li><a href="https://github.com/jupyterlite/jupyterlite-sphinx">jupyterlite-sphinx</a>:
-  A Sphinx extension for embedding JupyterLite notebooks in your Sphinx documentation site.
-  This is equivalent to this plugin, but for Sphinx instead of MkDocs.</li>
-<li><a href="https://github.com/jupyterlite/jupyterlite/issues/1690">The inspiring issue in jupyterlite</a>
-  that caused me to create this plugin.</li>
-</ul></div>
+<h3 id="enabled"><code>enabled</code></h3>
+<p>bool, whether or not the plugin is enabled. Defaults to <code>true</code>.</p>
+<h3 id="notebook_patterns"><code>notebook_patterns</code></h3>
+<p>A list of glob patterns (using <code>fnmatch</code>) that match the notebook files to include.
+Defaults to <code>['**/*.ipynb']</code>.</p>
+<p>For all files that match, the content of the page will be an
+iframe that embeds the JupyterLite Notebook html.</p>
+<h2 id="contributing">Contributing</h2>
+<p>I want this to be usable for other people, so file an issue if you want
+to use this in your site, but run into any problems.</p>
+<p>Possible improvements:
+- Include custom python wheels into the JupyterLite environment.
+- Passing an entire jupyter-lite.json config file.
+- Instead of using an iframe, actually inline the contents of the generated HTML?
+- Fix the TOC so clicking headers actually scrolls in the iframe.</p></div>
             </div>
         </div>
 
@@ -189,5 +199,5 @@ JupyterLite environment, but this should be possible to support in the future.</
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-08-10 05:13:32.431029+00:00
+Build Date UTC : 2025-08-10 05:53:55.184285+00:00
 -->
