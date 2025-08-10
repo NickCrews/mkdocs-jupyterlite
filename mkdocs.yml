@@ -1,4 +1,6 @@
 site_name: mkdocs-jupyterlite
+site_url: https://nickcrews.github.io/mkdocs-jupyterlite/
+repo_url: https://github.com/nickcrews/mkdocs-jupyterlite/
 
 nav:
   - Home: index.md
