@@ -98,7 +98,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             self.content = body
             toc, title_in_notebook = get_nb_toc_and_title(page.file.abs_src_path)
             self.toc = toc
-            if title_in_notebook:
+            if title_in_notebook and not self.title:
                 self.title = title_in_notebook
 
         # replace render with new_render for this object only
