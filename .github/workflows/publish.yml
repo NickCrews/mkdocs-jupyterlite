@@ -1,0 +1,30 @@
+
+name: publish 
+on:
+  workflow_dispatch:
+jobs:
+  pypi-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/<your-pypi-project-name>
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+        with:
+            fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+            python-version: "3.13"
+        
+      - name: Install UV
+        run: curl -LsSf https://astral.sh/uv/0.4.18/install.sh | sh
+
+      - name: Build package distributions
+        run: uv build
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
