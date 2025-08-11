@@ -131,14 +131,22 @@ plugins:
   - jupyterlite:
       enabled: true
       notebook_patterns:
-        - '*.ipynb'
+        # include all
+        - &quot;**/*.ipynb&quot;,
+        # exclude drafts
+        - &quot;!**/draft_*.ipynb&quot;,  
+        # re-include a specific draft
+        - &quot;project/drafts/draft_keep.ipynb&quot;,
+        # exclude an anchored notebook
+        - &quot;!/top_secret.ipynb&quot;,
 </code></pre>
 <p>Here are the details on the configuration options:</p>
 <h3 id="enabled"><code>enabled</code></h3>
 <p>bool, whether or not the plugin is enabled. Defaults to <code>true</code>.</p>
 <h3 id="notebook_patterns"><code>notebook_patterns</code></h3>
-<p>A list of glob patterns (using <code>fnmatch</code>) that match the notebook files to include.
-Defaults to <code>['**/*.ipynb']</code>.</p>
+<p>A list of patterns that uses <a href="https://git-scm.com/docs/gitignore">gitignore</a>
+semantics to include and exclude files.
+The last matching pattern will be used to determine if a file is a notebook.</p>
 <p>For all files that match, the content of the page will be an
 iframe that embeds the JupyterLite Notebook html.</p>
 <h2 id="contributing">Contributing</h2>
@@ -211,5 +219,5 @@ to use this in your site, but run into any problems.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-08-11 12:48:13.163274+00:00
+Build Date UTC : 2025-08-11 13:40:58.450697+00:00
 -->
