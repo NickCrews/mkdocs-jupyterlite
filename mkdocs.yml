@@ -4,7 +4,9 @@ repo_url: https://github.com/nickcrews/mkdocs-jupyterlite/
 
 nav:
   - Home: index.md
-  - Notebook 1: notebook.ipynb
+  - Notebook In Root: notebook-in-root.ipynb
+  - Directory:
+      - Notebook In Directory: directory/notebook-in-directory.ipynb
 
 markdown_extensions:
   - pymdownx.snippets:

@@ -1,38 +1,45 @@
+import contextlib
 import json
 import logging
+import os
 import shutil
 import subprocess
 import tempfile
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Generator
 
 log = logging.getLogger("mkdocs.plugins.jupyterlite")
 
 
 def build_site(
     *,
-    notebooks: Iterable[Path],
+    docs_dir: Path,
+    notebook_relative_paths: Iterable[Path],
     pip_urls: Iterable[str],
     output_dir: Path,
 ) -> None:
     shutil.rmtree(output_dir, ignore_errors=True)
     output_dir.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as working_dir_str:
-        working_dir = Path(working_dir_str)
+    with get_src_dir() as working_dir:
+        log.debug(f"[jupyterlite] using working dir: {working_dir}")
         write_jupyter_lite_config(
             out_path=working_dir / "jupyter_lite_config.json",
             pip_urls=pip_urls,
         )
-        contents_args = []
-        for notebook in notebooks:
-            contents_args.extend(["--contents", str(notebook)])
+        for notebook in notebook_relative_paths:
+            src = docs_dir / notebook
+            dst = working_dir / "files" / notebook
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            log.debug(f"[jupyterlite] copying {src} to build {dst}")
+            shutil.copy(src, dst)
         cmd = [
             "jupyter",
             "lite",
             "build",
-            # *(["--debug"] if debug else []),
             "--debug",
-            *contents_args,
+            "--contents",
+            "files",
             "--no-libarchive",
             "--apps",
             "notebooks",
@@ -74,3 +81,16 @@ def write_jupyter_lite_config(
         }
     }
     out_path.write_text(json.dumps(config, indent=2))
+
+
+@contextlib.contextmanager
+def get_src_dir() -> Generator[Path, None, None]:
+    # For debugging, allow setting the build directory
+    if (src_dir_str := os.environ.get("MKDOCS_JUPYTERLITE_SRC_DIR")) is not None:
+        p = Path(src_dir_str)
+        shutil.rmtree(p, ignore_errors=True)
+        p.mkdir(parents=True, exist_ok=True)
+        yield p
+    else:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield Path(tmpdir)

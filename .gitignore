@@ -1,4 +1,5 @@
 site
+.build
 
 # Python-generated files
 __pycache__/

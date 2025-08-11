@@ -60,21 +60,23 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
 
     def on_files(self, files: Files, config: MkDocsConfig) -> Files:
         outfiles = []
-        notebook_paths = []
+        # paths to notebooks relative to config.docs_dir
+        notebook_relative_paths = []
+        log.info("[jupyterlite] looking for notebook files in " + str(config.docs_dir))
         for file in files:
             if is_notebook(
                 relative_path=file.src_uri,
                 notebook_patterns=self.config.notebook_patterns,
             ):
-                log.info("[jupyterlite] including notebook: " + str(file.abs_src_path))
+                log.info("[jupyterlite] including notebook: " + str(file.src_uri))
                 outfiles.append(NotebookFile(file))
-                notebook_paths.append(file.abs_src_path)
+                notebook_relative_paths.append(file.src_uri)
             else:
-                log.debug("[jupyterlite] ignoring file: " + str(file.abs_src_path))
+                log.debug("[jupyterlite] ignoring file: " + str(file.src_uri))
                 outfiles.append(file)
-        notebooks = [Path(config.docs_dir) / p for p in notebook_paths]
         _build.build_site(
-            notebooks=notebooks,
+            docs_dir=Path(config.docs_dir),
+            notebook_relative_paths=notebook_relative_paths,
             pip_urls=[],
             output_dir=Path(self._jupyterlite_build_dir.name),
         )
