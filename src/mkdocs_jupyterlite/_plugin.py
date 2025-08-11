@@ -1,4 +1,3 @@
-import fnmatch
 import logging
 import shutil
 import tempfile
@@ -6,6 +5,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, Literal
 
+import gitmatch
 import markdown
 import nbformat
 from mkdocs.config.base import Config as BaseConfig
@@ -120,10 +120,8 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
 
 
 def is_notebook(*, relative_path: str | Path, notebook_patterns: Iterable[str]) -> bool:
-    for pattern in notebook_patterns:
-        if fnmatch.fnmatch(relative_path, pattern):
-            return True
-    return False
+    gi = gitmatch.compile(notebook_patterns, ignorecase=False)
+    return bool(gi.match(Path(relative_path).as_posix()))
 
 
 # Hooks for development

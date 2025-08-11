@@ -42,7 +42,14 @@ plugins:
   - jupyterlite:
       enabled: true
       notebook_patterns:
-        - '*.ipynb'
+        # include all
+        - "**/*.ipynb",
+        # exclude drafts
+        - "!**/draft_*.ipynb",  
+        # re-include a specific draft
+        - "project/drafts/draft_keep.ipynb",
+        # exclude an anchored notebook
+        - "!/top_secret.ipynb",
 ```
 
 Here are the details on the configuration options:
@@ -53,8 +60,9 @@ bool, whether or not the plugin is enabled. Defaults to `true`.
 
 ### `notebook_patterns`
 
-A list of glob patterns (using `fnmatch`) that match the notebook files to include.
-Defaults to `['**/*.ipynb']`.
+A list of patterns that uses [gitignore](https://git-scm.com/docs/gitignore)
+semantics to include and exclude files.
+The last matching pattern will be used to determine if a file is a notebook.
 
 For all files that match, the content of the page will be an
 iframe that embeds the JupyterLite Notebook html.

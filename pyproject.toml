@@ -6,8 +6,9 @@ readme = "README.md"
 authors = [
     { name = "Nick Crews", email = "nicholas.b.crews@gmail.com" }
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
+    "gitmatch>=0.2.1",
     "jupyterlab-server>=2.27.3",
     "jupyterlite-core>=0.6.4",
     "jupyterlite-pyodide-kernel>=0.6.1",
@@ -37,4 +38,10 @@ lint = [
 ]
 docs = [
     "pymdown-extensions>=10.16.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning:jupyter_client.connect",
 ]

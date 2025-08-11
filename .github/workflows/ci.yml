@@ -1,0 +1,61 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-lint-docs:
+    name: ci
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.9", "3.13"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install uv
+        shell: bash
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      
+      - name: Ruff check
+        run: uv run --group lint ruff check .
+
+      - name: Pytest
+        if: ${{ always() }}
+        run: uv run --group dev pytest -q
+
+      - name: MkDocs build
+        if: ${{ always() }}
+        run: uv run --group docs mkdocs build --strict
+
+      - name: Ruff format & commit
+        if: github.event_name == 'push' && matrix.os == 'ubuntu-latest' && matrix.python-version == '3.13'
+        run: |
+          uv run --group lint ruff format .
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "ci: apply ruff format"
+            git push || echo "Push failed; possibly due to race condition."
+          else
+            echo "No formatting changes.";
+          fi
