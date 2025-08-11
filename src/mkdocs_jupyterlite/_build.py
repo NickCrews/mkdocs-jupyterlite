@@ -77,12 +77,11 @@ def write_jupyter_lite_config(
     out_path: Path,
     pip_urls: Iterable[str],
 ) -> None:
-    config = {
-        "JupyterLiteAddon": {
-            "piplite_urls": list(pip_urls),
-        }
-    }
-    out_path.write_text(json.dumps(config, indent=2))
+    pip_urls = list(pip_urls)
+    log.debug(f"[jupyterlite] including pip URLS: {pip_urls}")
+    config = {"JupyterLiteAddon": {"piplite_urls": pip_urls}}
+    config_str = json.dumps(config, indent=2)
+    out_path.write_text(config_str)
 
 
 @contextlib.contextmanager
