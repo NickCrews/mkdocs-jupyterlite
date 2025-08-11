@@ -44,7 +44,7 @@ jobs:
 
       - name: MkDocs build
         if: ${{ always() }}
-        run: uv run --group docs mkdocs build --strict
+        run: uv run --group docs mkdocs build --strict --verbose
 
       - name: Ruff format & commit
         if: github.event_name == 'push' && matrix.os == 'ubuntu-latest' && matrix.python-version == '3.13'
