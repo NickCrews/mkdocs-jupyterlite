@@ -89,6 +89,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#related-work-and-alternatives" class="nav-link">Related Work and Alternatives</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-bs-level="2"><a href="#contributing" class="nav-link">Contributing</a>
               <ul class="nav flex-column">
               </ul>
@@ -101,19 +105,14 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="mkdocs-jupyterlite">mkdocs-jupyterlite</h1>
-<p>A MkDocs plugin that enables embedding interactive jupyterlite notebooks in your docs.</p>
-<p>See <a href="https://nickcrews.github.io/mkdocs-jupyterlite">this project's documentation site</a>
-for examples.</p>
+<p>A MkDocs plugin for embedding interactive notebooks in your docs via jupyterlite.</p>
+<p><img alt="Screenshot of a JupyterLite notebook embedded in MkDocs" src="https://raw.githubusercontent.com/NickCrews/mkdocs-jupyterlite/main/docs/assets/screenshot.png" /></p>
 <p>Say you have a notebook <code>example.ipynb</code> in your awesome project, and you want
 users to be able to play around with it.
-In the past, you could use a tool like <a href="https://mybinder.org/">Binder</a> to achieve this.
-But, that requires a full docker environment and a remote server.
 By using <a href="https://jupyterlite.readthedocs.io/">JupyterLite</a>,
 you can run Jupyter notebooks directly in the browser without any server-side dependencies.</p>
-<p>However, to use jupyterlite, you have to manually install jupyterlite and
-then run a build step to package your notebooks, other files, and python
-dependencies into a single static site.</p>
-<p>This plugin automates that process for you.</p>
+<p>See <a href="https://nickcrews.github.io/mkdocs-jupyterlite">this project's documentation site</a>
+for a live example.</p>
 <h2 id="installation">Installation</h2>
 <h3 id="step-1-install-the-plugin-from-pypi">Step 1: Install the plugin from <a href="https://pypi.org/project/mkdocs-jupyterlite/">PyPI</a>:</h3>
 <pre><code class="language-bash">python -m pip install mkdocs-jupyterlite
@@ -149,8 +148,42 @@ plugins:
 <p>A list of patterns that uses <a href="https://git-scm.com/docs/gitignore">gitignore</a>
 semantics to include and exclude files.
 The last matching pattern will be used to determine if a file is a notebook.</p>
+<p>These are resolved relative to your MkDocs <code>docs_dir</code> directory,
+which by default for most projects is <code>docs/</code>.
+So if you have a notebook at <code>docs/notebook.ipynb</code>,
+that corresponds to the pattern <code>/notebook.ipynb</code>.</p>
 <p>For all files that match, the content of the page will be an
 iframe that embeds the JupyterLite Notebook html.</p>
+<h2 id="related-work-and-alternatives">Related Work and Alternatives</h2>
+<ul>
+<li><a href="https://mybinder.org/">Binder</a>:
+  A popular tool for creating sharable, interactive environments for Jupyter notebooks.
+  Requires a full docker environment and a remote server.
+  The notebook is hosted separately from your docs, so a user has to click
+  away in order to run the notebook.
+  Takes 30-60 seconds to boot up a new environment.</li>
+<li><a href="https://github.com/danielfrg/mkdocs-jupyter">mkdocs-jupyter</a>:
+  A MkDocs plugin that embeds <em>static</em> Jupyter notebooks into your MkDocs site.
+  That project is very similar to this one, except that one executes and
+  renders the notebooks as static HTML at build time, so they
+  aren't interactive on the site.
+  It is much more mature than this project though.</li>
+<li><a href="https://github.com/jupyterlite/jupyterlite-sphinx">jupyterlite-sphinx</a>:
+  A Sphinx extension that integrates JupyterLite within your Sphinx documentation.
+  That project is very similar to this one, except that it is for Sphinx
+  instead of MkDocs.
+  It also has more features than this project.
+  I will probably use that as inspiration for future development of this project,
+  for example how it uses <code>environment.yml</code> to specify python packages that will
+  be included in the JupyterLite environment.</li>
+<li><a href="https://github.com/jupyterlite/jupyterlite">jupyterlite</a>:
+  The core project that powers this plugin.
+  You <em>can</em> use jupyterlite directly in your docs, it just is more work.
+  You would need to a build step to package your notebooks, other files, and python
+  dependencies into a single static .html file.
+  Then you would need to inject this .html file into the proper pages of your MkDocs site.
+  This plugin automates that process for you.</li>
+</ul>
 <h2 id="contributing">Contributing</h2>
 <p>I want this to be usable for other people, so file an issue if you want
 to use this in your site, but run into any problems.</p>
@@ -221,5 +254,5 @@ to use this in your site, but run into any problems.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-08-11 14:00:33.352993+00:00
+Build Date UTC : 2025-08-11 14:17:54.028756+00:00
 -->
