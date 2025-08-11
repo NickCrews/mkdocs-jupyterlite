@@ -89,11 +89,13 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
     ) -> Page | None:
         if not isinstance(page.file, NotebookFile):
             return page
-        log.info("[jupyterlite] on_pre_page " + str(page.file.src_uri))
+        iframe_src = f"{config.site_url}jupyterlite/notebooks/index.html?path={page.file.src_uri}"
 
         def new_render(self: Page, config: MkDocsConfig, files: Files) -> None:
+            log.debug("[jupyterlite] rendering " + page.file.abs_src_path)
+            log.debug("[jupyterlite] creating iframe with src " + iframe_src)
             body = f"""
-            <iframe src="{config.site_url}jupyterlite/notebooks/index.html?path={page.file.src_uri}"
+            <iframe src="{iframe_src}"
                 width="100%"
                 height="800px"
                 frameborder="1">
@@ -101,6 +103,9 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             """
             self.content = body
             toc, title_in_notebook = get_nb_toc_and_title(page.file.abs_src_path)
+            log.debug("[jupyterlite] TOC: " + str(toc))
+            log.debug("[jupyterlite] title in notebook: " + str(title_in_notebook))
+            log.debug("[jupyterlite] page title: " + str(self.title))
             self.toc = toc
             if title_in_notebook and not self.title:
                 self.title = title_in_notebook
