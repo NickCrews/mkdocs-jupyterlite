@@ -44,17 +44,19 @@ def build_site(
         try:
             result = subprocess.run(
                 cmd,
-                # capture_output=True,
+                capture_output=True,
                 text=True,
                 cwd=working_dir,
                 check=True,
             )
             if result.stdout:
                 log.debug("[jupyterlite] build output:\n" + result.stdout)
+            if result.stderr:
+                log.debug("[jupyterlite] build stderr:\n" + result.stderr)
         except subprocess.CalledProcessError as e:
             log.error("[jupyterlite] build failed")
             if e.stdout:
-                log.debug("[jupyterlite] build stdout:\n" + e.stdout)
+                log.error("[jupyterlite] build stdout:\n" + e.stdout)
             if e.stderr:
                 log.error("[jupyterlite] build stderr:\n" + e.stderr)
             raise
