@@ -3,6 +3,9 @@
 
 A MkDocs plugin that enables embedding interactive jupyterlite notebooks in your docs.
 
+See [this project's documentation site](https://nickcrews.github.io/mkdocs-jupyterlite)
+for examples.
+
 Say you have a notebook `example.ipynb` in your awesome project, and you want
 users to be able to play around with it.
 In the past, you could use a tool like [Binder](https://mybinder.org/) to achieve this.
