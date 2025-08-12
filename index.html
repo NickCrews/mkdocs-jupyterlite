@@ -38,14 +38,14 @@
                                 <a href="." class="nav-link active" aria-current="page">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a href="notebook-in-root/" class="nav-link">Notebook In Root</a>
+                                <a href="notebook/" class="nav-link">Notebook In Root</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Directory</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
-    <a href="directory/notebook-in-directory/" class="dropdown-item">Notebook In Directory</a>
+    <a href="directory/notebook/" class="dropdown-item">Notebook In Directory</a>
 </li>
                                 </ul>
                             </li>
@@ -58,7 +58,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="notebook-in-root/" class="nav-link">
+                                <a rel="next" href="notebook/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -133,13 +133,21 @@ plugins:
       enabled: true
       notebook_patterns:
         # include all
-        - &quot;**/*.ipynb&quot;,
+        - &quot;**/*.ipynb&quot;
         # exclude drafts
-        - &quot;!**/draft_*.ipynb&quot;,  
+        - &quot;!**/draft_*.ipynb&quot;
         # re-include a specific draft
-        - &quot;project/drafts/draft_keep.ipynb&quot;,
+        - &quot;project/drafts/draft_keep.ipynb&quot;
         # exclude an anchored notebook
-        - &quot;!/top_secret.ipynb&quot;,
+        - &quot;!/top_secret.ipynb&quot;
+      wheels:
+        # Specify a url directly.
+        - url: &quot;https://files.pythonhosted.org/packages/2d/2c/7f32ba15302847f0cd0d01101470b2f427ec5b3a07756f41c823c01c0242/ibis_framework-10.5.0-py3-none-any.whl&quot;
+        # Run a shell command that dynamically
+        # builds/fetches/creates 0 to N .whl files in the given {wheels_dir}
+        # (which will be replaced by this plugin with a real, temporary directory).
+        - command: &quot;curl -L -o {wheels_dir}/cowsay-6.1-py3-none-any.whl https://files.pythonhosted.org/packages/f1/13/63c0a02c44024ee16f664e0b36eefeb22d54e93531630bd99e237986f534/cowsay-6.1-py3-none-any.whl&quot;
+        - command: &quot;cd src/package_not_on_pypi/ &amp;&amp; uv build --out-dir {wheels_dir}&quot;
 </code></pre>
 <p>Here are the details on the configuration options:</p>
 <h3 id="enabled"><code>enabled</code></h3>
@@ -154,6 +162,13 @@ So if you have a notebook at <code>docs/notebook.ipynb</code>,
 that corresponds to the pattern <code>/notebook.ipynb</code>.</p>
 <p>For all files that match, the content of the page will be an
 iframe that embeds the JupyterLite Notebook html.</p>
+<h3 id="wheels"><code>wheels</code></h3>
+<p>A list of wheels to include in the JupyterLite environment.
+The simplest form is to specify a file path or URL directly underneath the <code>url</code> key.</p>
+<p>Or, if you use the <code>command</code> key, this is interpreted as a shell command.
+This plugin will replace the <code>{wheels_dir}</code> placeholder with a temporary directory,
+and then run the command in the directory that the <code>mkdocs</code> command was run from.
+This command must place/create 0 to N <code>.whl</code> files in the given <code>{wheels_dir}</code> directory.</p>
 <h2 id="related-work-and-alternatives">Related Work and Alternatives</h2>
 <ul>
 <li><a href="https://mybinder.org/">Binder</a>:
@@ -254,5 +269,5 @@ to use this in your site, but run into any problems.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-08-11 14:18:37.035396+00:00
+Build Date UTC : 2025-08-12 01:34:01.306192+00:00
 -->

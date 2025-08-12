@@ -1,0 +1,80 @@
+{
+  "cowsay": {
+    "releases": {
+      "6.1": [
+        {
+          "comment_text": "",
+          "digests": {
+            "md5": "8fe287e84772d7595c611d236cae4fdc",
+            "sha256": "274b1e6fc1b966d53976333eb90ac94cb07a450a700b455af9fbdf882244b30a"
+          },
+          "downloads": -1,
+          "filename": "cowsay-6.1-py3-none-any.whl",
+          "has_sig": false,
+          "md5_digest": "8fe287e84772d7595c611d236cae4fdc",
+          "packagetype": "bdist_wheel",
+          "python_version": "py3",
+          "requires_python": ">=3.8",
+          "size": 25560,
+          "upload_time": "2025-08-12T01:33:56.544567Z",
+          "upload_time_iso_8601": "2025-08-12T01:33:56.544567Z",
+          "url": "./cowsay-6.1-py3-none-any.whl",
+          "yanked": false,
+          "yanked_reason": null
+        }
+      ]
+    }
+  },
+  "ibis-framework": {
+    "releases": {
+      "10.5.0": [
+        {
+          "comment_text": "",
+          "digests": {
+            "md5": "2231057b4eaa7cba0bcbd57c42e50a2c",
+            "sha256": "71715839e655c37c12e4ff3cd6fe1e8ba82350faab074b1a5324084734a8fe15"
+          },
+          "downloads": -1,
+          "filename": "ibis_framework-10.5.0-py3-none-any.whl",
+          "has_sig": false,
+          "md5_digest": "2231057b4eaa7cba0bcbd57c42e50a2c",
+          "packagetype": "bdist_wheel",
+          "python_version": "py3",
+          "requires_python": ">=3.9",
+          "size": 1927259,
+          "upload_time": "2025-04-18T20:10:16Z",
+          "upload_time_iso_8601": "2025-04-18T20:10:16Z",
+          "url": "./ibis_framework-10.5.0-py3-none-any.whl",
+          "yanked": false,
+          "yanked_reason": null
+        }
+      ]
+    }
+  },
+  "package-not-on-pypi": {
+    "releases": {
+      "0.1.0": [
+        {
+          "comment_text": "",
+          "digests": {
+            "md5": "6614dc2e7966cf7acd234b199980050f",
+            "sha256": "8fd0cd75b0da516f5db0d0090119990f03e48cb3c4f9b4dcb2cc81128c735771"
+          },
+          "downloads": -1,
+          "filename": "package_not_on_pypi-0.1.0-py3-none-any.whl",
+          "has_sig": false,
+          "md5_digest": "6614dc2e7966cf7acd234b199980050f",
+          "packagetype": "bdist_wheel",
+          "python_version": "py3",
+          "requires_python": null,
+          "size": 1350,
+          "upload_time": "2025-08-12T01:33:56.601568Z",
+          "upload_time_iso_8601": "2025-08-12T01:33:56.601568Z",
+          "url": "./package_not_on_pypi-0.1.0-py3-none-any.whl",
+          "yanked": false,
+          "yanked_reason": null
+        }
+      ]
+    }
+  }
+}
