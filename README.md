@@ -40,13 +40,21 @@ plugins:
       enabled: true
       notebook_patterns:
         # include all
-        - "**/*.ipynb",
+        - "**/*.ipynb"
         # exclude drafts
-        - "!**/draft_*.ipynb",  
+        - "!**/draft_*.ipynb"
         # re-include a specific draft
-        - "project/drafts/draft_keep.ipynb",
+        - "project/drafts/draft_keep.ipynb"
         # exclude an anchored notebook
-        - "!/top_secret.ipynb",
+        - "!/top_secret.ipynb"
+      wheels:
+        # Specify a url directly.
+        - url: "https://files.pythonhosted.org/packages/2d/2c/7f32ba15302847f0cd0d01101470b2f427ec5b3a07756f41c823c01c0242/ibis_framework-10.5.0-py3-none-any.whl"
+        # Run a shell command that dynamically
+        # builds/fetches/creates 0 to N .whl files in the given {wheels_dir}
+        # (which will be replaced by this plugin with a real, temporary directory).
+        - command: "curl -L -o {wheels_dir}/cowsay-6.1-py3-none-any.whl https://files.pythonhosted.org/packages/f1/13/63c0a02c44024ee16f664e0b36eefeb22d54e93531630bd99e237986f534/cowsay-6.1-py3-none-any.whl"
+        - command: "cd src/package_not_on_pypi/ && uv build --out-dir {wheels_dir}"
 ```
 
 Here are the details on the configuration options:
@@ -68,6 +76,16 @@ that corresponds to the pattern `/notebook.ipynb`.
 
 For all files that match, the content of the page will be an
 iframe that embeds the JupyterLite Notebook html.
+
+### `wheels`
+
+A list of wheels to include in the JupyterLite environment.
+The simplest form is to specify a file path or URL directly underneath the `url` key.
+
+Or, if you use the `command` key, this is interpreted as a shell command.
+This plugin will replace the `{wheels_dir}` placeholder with a temporary directory,
+and then run the command in the directory that the `mkdocs` command was run from.
+This command must place/create 0 to N `.whl` files in the given `{wheels_dir}` directory.
 
 ## Related Work and Alternatives
 

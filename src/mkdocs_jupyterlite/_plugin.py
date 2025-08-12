@@ -11,6 +11,7 @@ import gitmatch
 import markdown
 import nbformat
 from mkdocs.config.base import Config as BaseConfig
+from mkdocs.config.config_options import ListOfItems, SubConfig
 from mkdocs.config.config_options import Type as OptionType
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.plugins import BasePlugin
@@ -39,9 +40,15 @@ class NotebookFile(File):
         return True
 
 
+class _WheelConfig(BaseConfig):
+    command = OptionType(str, default="")
+    url = OptionType(str, default="")
+
+
 class JupyterlitePluginConfig(BaseConfig):
     enabled = OptionType(bool, default=True)
     notebook_patterns = OptionType(list, default=["**/*.ipynb"])
+    wheels = ListOfItems(SubConfig(_WheelConfig))
 
 
 class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
@@ -79,7 +86,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
         _build.build_site(
             docs_dir=Path(config.docs_dir),
             notebook_relative_paths=notebook_relative_paths,
-            pip_urls=[],
+            wheel_sources=self.config.wheels,
             output_dir=Path(self._jupyterlite_build_dir.name),
         )
         return Files(outfiles)

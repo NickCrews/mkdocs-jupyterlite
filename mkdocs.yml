@@ -4,9 +4,9 @@ repo_url: https://github.com/nickcrews/mkdocs-jupyterlite/
 
 nav:
   - Home: index.md
-  - Notebook In Root: notebook-in-root.ipynb
+  - Notebook In Root: notebook.ipynb
   - Directory:
-      - Notebook In Directory: directory/notebook-in-directory.ipynb
+      - Notebook In Directory: directory/notebook.ipynb
 
 markdown_extensions:
   - pymdownx.snippets:
@@ -17,3 +17,11 @@ plugins:
       enabled: true
       notebook_patterns:
         - '*.ipynb'
+      wheels:
+        # Specify a url directly.
+        - url: "https://files.pythonhosted.org/packages/2d/2c/7f32ba15302847f0cd0d01101470b2f427ec5b3a07756f41c823c01c0242/ibis_framework-10.5.0-py3-none-any.whl"
+        # Run a shell command that dynamically
+        # builds/fetches/creates 0 to N .whl files in the given {wheels_dir}
+        # (which will be replaced by this plugin with a real, temporary directory).
+        - command: "curl -L -o {wheels_dir}/cowsay-6.1-py3-none-any.whl https://files.pythonhosted.org/packages/f1/13/63c0a02c44024ee16f664e0b36eefeb22d54e93531630bd99e237986f534/cowsay-6.1-py3-none-any.whl"
+        - command: "cd src/package_not_on_pypi/ && uv build --out-dir {wheels_dir}"
