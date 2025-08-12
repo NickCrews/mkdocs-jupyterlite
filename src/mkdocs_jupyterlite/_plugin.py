@@ -48,7 +48,7 @@ class _WheelConfig(BaseConfig):
 class JupyterlitePluginConfig(BaseConfig):
     enabled = OptionType(bool, default=True)
     notebook_patterns = OptionType(list, default=["**/*.ipynb"])
-    wheels = ListOfItems(SubConfig(_WheelConfig))
+    wheels = ListOfItems(SubConfig(_WheelConfig), default=[])
 
 
 class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
