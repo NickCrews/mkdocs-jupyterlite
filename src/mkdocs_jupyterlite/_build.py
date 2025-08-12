@@ -109,7 +109,6 @@ def _get_wheel_urls(
                 wheel_urls.append(source.url)
         elif source.command:
             with tempfile.TemporaryDirectory() as tmpdir:
-                tmpdir = "/Users/nc/code/mkdocs-jupyterlite/.tmp"
                 actual_command = source.command.format(wheels_dir=tmpdir)
                 log.info("[jupyterlite] running wheel command")
                 _run_command(actual_command, shell=True)
