@@ -130,16 +130,23 @@ nav:
 
 plugins:
   - jupyterlite:
+      # An easy way to turn off the entire plugin.
       enabled: true
+      # Uses the same syntax as .gitignore:
+      # Include and exclude files using glob patterns, the last matching pattern
+      # determines if a file is included or excluded.
       notebook_patterns:
-        # include all
+        # Include all. This is the default.
         - &quot;**/*.ipynb&quot;
-        # exclude drafts
+        # Exclude drafts.
         - &quot;!**/draft_*.ipynb&quot;
-        # re-include a specific draft
+        # Re-include a specific draft.
         - &quot;project/drafts/draft_keep.ipynb&quot;
-        # exclude an anchored notebook
+        # Exclude a notebook at the root. Doesn't match /a/b/c/top_secret.ipynb
         - &quot;!/top_secret.ipynb&quot;
+      # Add custom wheels so that when you
+      # `%pip install my-package` in the notebook,
+      # the micropip library has a backup after PyPI to fall back on.
       wheels:
         # Specify a url directly.
         - url: &quot;https://files.pythonhosted.org/packages/2d/2c/7f32ba15302847f0cd0d01101470b2f427ec5b3a07756f41c823c01c0242/ibis_framework-10.5.0-py3-none-any.whl&quot;
@@ -269,5 +276,5 @@ to use this in your site, but run into any problems.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-08-12 16:12:23.538531+00:00
+Build Date UTC : 2025-08-13 23:36:52.770688+00:00
 -->
