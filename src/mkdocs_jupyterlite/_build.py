@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+import json
 import logging
 import os
 import shutil
@@ -30,6 +31,7 @@ def build_site(
     output_dir.mkdir(parents=True, exist_ok=True)
     with _get_src_dir() as working_dir:
         log.debug(f"[jupyterlite] using working dir: {working_dir}")
+        _write_jupyter_lite_json(working_dir)
         wheels_dir = working_dir / "wheels"
         wheel_urls = _get_wheel_urls(wheels_dir, wheel_sources)
         for notebook in notebook_relative_paths:
@@ -59,6 +61,29 @@ def build_site(
         log.info("[jupyterlite] running build command")
         _run_command(cmd, cwd=working_dir)
         assert output_dir.exists(), "Output directory was not created"
+
+
+def _write_jupyter_lite_json(working_dir: Path) -> None:
+    data = {
+        "jupyter-lite-schema-version": 0,
+        "jupyter-config-data": {
+            # By default, jupyterlite saves the state of the notebook to the client's
+            # browser, and on reload of the page, the notebook will be restored to that state.
+            # The problem is that this local state overrides the contents sent from the server.
+            # So, if you edit a notebook rebuild your docs, and refresh the page,
+            # you still see the old version.
+            # These settings make it so that the state is never stored on the client,
+            # and is refreshed from the server on every page load.
+            # Not ideal: it would be great if the user's state persisted until the
+            # data on the server actually *changed*, but that doesn't appear possible yet.
+            # See https://github.com/jupyterlite/jupyterlite/issues/1706#issuecomment-3187140714
+            "enableMemoryStorage": True,
+            "settingsStorageDrivers": ["memoryStorageDriver"],
+            "contentsStorageDrivers": ["memoryStorageDriver"],
+        },
+    }
+    path = working_dir / "jupyter-lite.json"
+    path.write_text(json.dumps(data, indent=4))
 
 
 def _run_command(cmd: list[str], **kwargs):
