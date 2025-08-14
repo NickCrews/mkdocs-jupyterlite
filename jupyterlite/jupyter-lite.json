@@ -4,7 +4,11 @@
     "appUrl": "./lab",
     "appVersion": "0.6.4",
     "baseUrl": "./",
+    "contentsStorageDrivers": [
+      "memoryStorageDriver"
+    ],
     "defaultKernelName": "python",
+    "enableMemoryStorage": true,
     "faviconUrl": "./lab/favicon.ico",
     "federated_extensions": [
       {
@@ -298,11 +302,14 @@
     "litePluginSettings": {
       "@jupyterlite/pyodide-kernel-extension:kernel": {
         "pipliteUrls": [
-          "./pypi/all.json?sha256=79b0e8d2bbf6c29ba29a3fa7f2ca05566bb125ba23d382d7a5971525a89557da",
+          "./pypi/all.json?sha256=f70efb3c80f111d0b963ca5ba6cb4e3c52fd28f15721462facd08acdd5c3e974",
           "./extensions/@jupyterlite/pyodide-kernel-extension/static/pypi/all.json?sha256=6428e372c283ca4b67a641295c5d9c8abeed5cf341b24ffe41b313fcdcaf9be4"
         ]
       }
-    }
+    },
+    "settingsStorageDrivers": [
+      "memoryStorageDriver"
+    ]
   },
   "jupyter-lite-schema-version": 0
 }
