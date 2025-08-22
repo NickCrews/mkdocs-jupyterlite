@@ -12,6 +12,9 @@ markdown_extensions:
   - pymdownx.snippets:
       check_paths: true
 
+extra_css:
+  - extra.css
+
 plugins:
   - jupyterlite:
       enabled: true

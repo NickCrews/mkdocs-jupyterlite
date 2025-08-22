@@ -124,6 +124,16 @@ This command must place/create 0 to N `.whl` files in the given `{wheels_dir}` d
   Then you would need to inject this .html file into the proper pages of your MkDocs site.
   This plugin automates that process for you.
 
+## Style Compatibility with `mkdocs-material`
+
+[mkdocs-material](https://squidfunk.github.io/mkdocs-material/)
+is a popular theme for MkDocs that is compatible with this plugin.
+But, in its css, it limits the `max-width` of the content area to be 61rem.
+This is just small enough that the JupyterLite notebook, when embedded,
+thinks it is on a mobile device, and so many of the important UI elements of JupyterLite,
+such as the "add cell below" hover menu, are hidden.
+To get around this, see https://github.com/NickCrews/mkdocs-jupyterlite/blob/main/docs/extra.css
+
 ## Contributing
 
 I want this to be usable for other people, so file an issue if you want
