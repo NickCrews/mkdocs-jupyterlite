@@ -1,0 +1,33 @@
+.md-main__inner.md-grid {
+    max-width: 70rem;
+}
+
+/*
+[mkdocs-material](https://squidfunk.github.io/mkdocs-material/)
+is a popular theme for MkDocs that is compatible with this plugin.
+But, in its css, it limits the `max-width` of the content area to be 61rem.
+This appears to be just small enough that the JupyterLite notebook, when embedded,
+thinks it is on a mobile device, and so many of the important UI elements of JupyterLite,
+such as the "add cell below" hover menu, are hidden.
+
+To get around this (as demonstrated in this repo):
+- add a `extra.css` file in your docs directory with the following content (as in this file):
+  ```css
+  .md-main__inner.md-grid {
+    max-width: 70rem;
+  }
+  ```
+- Then add this to your `mkdocs.yml`:
+  ```yaml
+  extra_css:
+    - extra.css
+  ```
+
+I have set this up in this repository as an example if that is confusing.
+
+If you can think of a better/automatic way to do this, please file an issue.
+
+See also:
+- https://github.com/jupyterlite/jupyterlite/issues/1704
+- https://github.com/squidfunk/mkdocs-material/discussions/6404
+*/

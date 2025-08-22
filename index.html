@@ -17,6 +17,7 @@
         <link href="css/base.css" rel="stylesheet">
         <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
         <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
@@ -90,6 +91,10 @@
               </ul>
             </li>
             <li class="nav-item" data-bs-level="2"><a href="#related-work-and-alternatives" class="nav-link">Related Work and Alternatives</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#style-compatibility-with-mkdocs-material" class="nav-link">Style Compatibility with mkdocs-material</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -206,6 +211,14 @@ This command must place/create 0 to N <code>.whl</code> files in the given <code
   Then you would need to inject this .html file into the proper pages of your MkDocs site.
   This plugin automates that process for you.</li>
 </ul>
+<h2 id="style-compatibility-with-mkdocs-material">Style Compatibility with <code>mkdocs-material</code></h2>
+<p><a href="https://squidfunk.github.io/mkdocs-material/">mkdocs-material</a>
+is a popular theme for MkDocs that is compatible with this plugin.
+But, in its css, it limits the <code>max-width</code> of the content area to be 61rem.
+This is just small enough that the JupyterLite notebook, when embedded,
+thinks it is on a mobile device, and so many of the important UI elements of JupyterLite,
+such as the "add cell below" hover menu, are hidden.
+To get around this, see https://github.com/NickCrews/mkdocs-jupyterlite/blob/main/docs/extra.css</p>
 <h2 id="contributing">Contributing</h2>
 <p>I want this to be usable for other people, so file an issue if you want
 to use this in your site, but run into any problems.</p>
@@ -276,5 +289,5 @@ to use this in your site, but run into any problems.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-08-14 21:08:14.935709+00:00
+Build Date UTC : 2025-08-22 18:56:45.791080+00:00
 -->
