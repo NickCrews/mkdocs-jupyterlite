@@ -2,11 +2,11 @@
   "content": [
     {
       "content": null,
-      "created": "2025-08-22T18:56:44.771436Z",
+      "created": "2025-08-25T14:37:44.999997Z",
       "format": null,
       "hash": null,
       "hash_algorithm": null,
-      "last_modified": "2025-08-22T18:56:40.801423Z",
+      "last_modified": "2025-08-25T14:37:41.378985Z",
       "mimetype": null,
       "name": "notebook.ipynb",
       "path": "notebook.ipynb",
@@ -16,11 +16,11 @@
     },
     {
       "content": null,
-      "created": "2025-08-22T18:56:44.770436Z",
+      "created": "2025-08-25T14:37:44.999997Z",
       "format": null,
       "hash": null,
       "hash_algorithm": null,
-      "last_modified": "2025-08-22T18:56:44.770436Z",
+      "last_modified": "2025-08-25T14:37:44.999997Z",
       "mimetype": null,
       "name": "directory",
       "path": "directory",
@@ -29,11 +29,11 @@
       "writable": true
     }
   ],
-  "created": "2025-08-22T18:56:44.771436Z",
+  "created": "2025-08-25T14:37:44.999997Z",
   "format": "json",
   "hash": null,
   "hash_algorithm": null,
-  "last_modified": "2025-08-22T18:56:44.771436Z",
+  "last_modified": "2025-08-25T14:37:44.999997Z",
   "mimetype": null,
   "name": "",
   "path": "",
