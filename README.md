@@ -10,8 +10,11 @@ users to be able to play around with it.
 By using [JupyterLite](https://jupyterlite.readthedocs.io/),
 you can run Jupyter notebooks directly in the browser without any server-side dependencies.
 
-See [this project's documentation site](https://nickcrews.github.io/mkdocs-jupyterlite)
-for a live example.
+## Examples
+
+- [This project's documentation site](https://nickcrews.github.io/mkdocs-jupyterlite)
+- [Mismo's documentation site](https://nickcrews.github.io/mismo/examples/patent_deduplication/)
+  (Mismo was the initial motivation for this plugin.)
 
 ## Installation
 
@@ -141,7 +144,7 @@ to use this in your site, but run into any problems.
 
 Possible improvements:
 
-- Include custom python wheels into the JupyterLite environment.
-- Passing an entire jupyter-lite.json config file.
-- Instead of using an iframe, actually inline the contents of the generated HTML?
-- Fix the TOC so clicking headers actually scrolls in the iframe.
+- [x] Include custom python wheels into the JupyterLite environment.
+- [ ] Passing an entire jupyter-lite.json config file.
+- [ ] Instead of using an iframe, actually inline the contents of the generated HTML?
+- [ ] Fix the TOC so clicking headers actually scrolls in the iframe.
