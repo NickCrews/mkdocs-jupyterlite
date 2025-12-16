@@ -84,6 +84,20 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             else:
                 log.debug("[jupyterlite] ignoring file: " + str(file.src_uri))
                 outfiles.append(file)
+        
+        # Add the TOC handler JavaScript to the site files
+        static_dir = Path(__file__).parent / "static"
+        toc_handler_path = static_dir / "toc-handler.js"
+        if toc_handler_path.exists():
+            toc_handler_file = File(
+                path="toc-handler.js",
+                src_dir=str(static_dir),
+                dest_dir=config.site_dir,
+                use_directory_urls=False,
+            )
+            outfiles.append(toc_handler_file)
+            log.info("[jupyterlite] added toc-handler.js to site files")
+        
         _build.build_site(
             docs_dir=Path(config.docs_dir),
             notebook_relative_paths=notebook_relative_paths,
@@ -97,17 +111,30 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
     ) -> Page | None:
         if not isinstance(page.file, NotebookFile):
             return page
-        iframe_src = f"{config.site_url}jupyterlite/notebooks/index.html?path={page.file.src_uri}"
+        
+        # Calculate relative path to jupyterlite from this page
+        # With use_directory_urls, each page gets its own directory (e.g., /notebook/)
+        # So we need one more "../" than the number of slashes in src_uri
+        page_depth = page.file.src_uri.count("/") + 1
+        jupyterlite_path = "../" * page_depth + "jupyterlite"
+        iframe_src = f"{jupyterlite_path}/notebooks/index.html?path={page.file.src_uri}"
 
         def new_render(self: Page, config: MkDocsConfig, files: Files) -> None:
             log.debug("[jupyterlite] rendering " + page.file.abs_src_path)
             log.debug("[jupyterlite] creating iframe with src " + iframe_src)
+            
+            # Calculate the relative path to the toc-handler.js from this page
+            # Use the same page_depth calculation as for iframe_src
+            toc_handler_path = "../" * page_depth + "toc-handler.js"
+            
             body = f"""
             <iframe src="{iframe_src}"
                 width="100%"
                 height="800px"
-                frameborder="1">
+                frameborder="1"
+                id="jupyterlite-iframe">
             </iframe>
+            <script src="{toc_handler_path}"></script>
             """
             self.content = body
             toc, title_in_notebook = get_nb_toc_and_title(page.file.abs_src_path)
