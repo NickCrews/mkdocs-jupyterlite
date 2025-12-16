@@ -3,7 +3,7 @@
 
 A MkDocs plugin for embedding interactive notebooks in your docs via jupyterlite.
 
-![Demo of a JupyterLite notebook embedded in MkDocs](https://raw.githubusercontent.com/NickCrews/mkdocs-jupyterlite/main/docs/assets/demo.gif)
+![Animated demo showing interactive JupyterLite notebook execution in MkDocs](https://raw.githubusercontent.com/NickCrews/mkdocs-jupyterlite/main/docs/assets/demo.gif)
 
 Say you have a notebook `example.ipynb` in your awesome project, and you want
 users to be able to play around with it.
