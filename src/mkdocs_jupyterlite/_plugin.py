@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 import shutil
 import tempfile
@@ -167,9 +168,24 @@ def get_nb_toc_and_title(path: str | Path) -> tuple[TableOfContents, str | None]
     """Returns a TOC and title (the first heading, if present) for the Notebook."""
     notebook = nbformat.reads(Path(path).read_text(), as_version=4)
     (markdown_source, _resources) = MarkdownExporter().from_notebook_node(notebook)
-    md = markdown.Markdown(extensions=["toc"])
+    log.debug("[jupyterlite] converted notebook to markdown:\n" + markdown_source)
+    md = markdown.Markdown(
+        # enable all extensions to improve probability that parsing works.
+        extensions=[
+            "admonition",
+            "codehilite",
+            "extra",
+            "fenced_code",
+            "meta",
+            "sane_lists",
+            "smarty",
+            "toc",
+            "wikilinks",
+        ]
+    )
     md.convert(markdown_source)
     toc_tokens: list[_TocToken] = md.toc_tokens  # type: ignore[attr-defined]
+    log.debug("[jupyterlite] extracted TOC tokens: " + json.dumps(toc_tokens, indent=2))
     toc = get_toc(toc_tokens)
     title = None
     for token in toc_tokens:
