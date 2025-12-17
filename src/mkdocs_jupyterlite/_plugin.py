@@ -17,8 +17,8 @@ from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.plugins import BasePlugin
 from mkdocs.structure.files import File, Files
 from mkdocs.structure.pages import Page
-from mkdocs.structure.toc import TableOfContents, get_toc
-from nbconvert import MarkdownExporter
+from mkdocs.structure.toc import TableOfContents, _TocToken, get_toc
+from nbconvert.exporters import MarkdownExporter
 
 from mkdocs_jupyterlite import _build
 
@@ -115,10 +115,10 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             log.debug("[jupyterlite] page title: " + str(self.title))
             self.toc = toc
             if title_in_notebook and not self.title:
-                self.title = title_in_notebook
+                self.meta["title"] = title_in_notebook
 
         # replace render with new_render for this object only
-        page.render = new_render.__get__(page, Page)
+        page.render = new_render.__get__(page, Page)  # ty:ignore[invalid-assignment]
         return page
 
     def on_post_build(self, config: MkDocsConfig) -> None:
@@ -143,13 +143,15 @@ def on_startup(command: str, dirty: bool) -> None:
     log.info("[jupyterlite][development] plugin started.")
 
 
-def on_page_markdown(markdown: str, page: Any, config: MkDocsConfig, files: Any) -> str:
+def on_page_markdown(
+    markdown: str, page: Any, config: MkDocsConfig, files: Any
+) -> str | None:
     log.info("[jupyterlite][development] plugin started.")
     plugin = JupyterlitePlugin()
     return plugin.on_page_markdown(markdown, page=page, config=config, files=files)
 
 
-def on_post_page(output: str, page: Page, config: MkDocsConfig) -> str:
+def on_post_page(output: str, page: Page, config: MkDocsConfig) -> str | None:
     log.info("[jupyterlite][development] plugin started.")
     plugin = JupyterlitePlugin()
     return plugin.on_post_page(output, page=page, config=config)
@@ -167,9 +169,10 @@ def get_nb_toc_and_title(path: str | Path) -> tuple[TableOfContents, str | None]
     (markdown_source, _resources) = MarkdownExporter().from_notebook_node(notebook)
     md = markdown.Markdown(extensions=["toc"])
     md.convert(markdown_source)
-    toc = get_toc(md.toc_tokens)
+    toc_tokens: list[_TocToken] = md.toc_tokens  # type: ignore[attr-defined]
+    toc = get_toc(toc_tokens)
     title = None
-    for token in md.toc_tokens:
+    for token in toc_tokens:
         if token["level"] == 1 and title is None:
             title = token["name"]
     return toc, title

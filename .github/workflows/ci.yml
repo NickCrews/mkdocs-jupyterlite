@@ -37,6 +37,9 @@ jobs:
       
       - name: Ruff check
         run: uv run --group lint ruff check .
+      
+      - name: Ty check
+        run: uv run --group lint ty check
 
       - name: Pytest
         if: ${{ always() }}

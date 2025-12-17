@@ -86,7 +86,7 @@ def _write_jupyter_lite_json(working_dir: Path) -> None:
     path.write_text(json.dumps(data, indent=4))
 
 
-def _run_command(cmd: list[str], **kwargs):
+def _run_command(cmd: str | list[str], **kwargs):
     cmd_str = cmd if isinstance(cmd, str) else " ".join(cmd)
     log.info("[jupyterlite] running command: " + cmd_str)
     try:
@@ -129,7 +129,7 @@ def _get_wheel_urls(
                 # Local file URL
                 wheel_file = Path(url.path).name
                 dst = shutil.copy(source.url, wheels_dir / wheel_file)
-                wheel_urls.append(str(dst.absolute()))
+                wheel_urls.append(str(Path(dst).absolute()))
             else:
                 wheel_urls.append(source.url)
         elif source.command:
