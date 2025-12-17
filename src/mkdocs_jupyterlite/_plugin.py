@@ -84,7 +84,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             else:
                 log.debug("[jupyterlite] ignoring file: " + str(file.src_uri))
                 outfiles.append(file)
-        
+
         # Add the TOC handler JavaScript to the site files
         static_dir = Path(__file__).parent / "static"
         toc_handler_path = static_dir / "toc-handler.js"
@@ -97,7 +97,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             )
             outfiles.append(toc_handler_file)
             log.info("[jupyterlite] added toc-handler.js to site files")
-        
+
         _build.build_site(
             docs_dir=Path(config.docs_dir),
             notebook_relative_paths=notebook_relative_paths,
@@ -111,7 +111,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
     ) -> Page | None:
         if not isinstance(page.file, NotebookFile):
             return page
-        
+
         # Calculate relative path to jupyterlite from this page
         # With use_directory_urls, each page gets its own directory (e.g., /notebook/)
         # So we need one more "../" than the number of slashes in src_uri
@@ -122,11 +122,11 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
         def new_render(self: Page, config: MkDocsConfig, files: Files) -> None:
             log.debug("[jupyterlite] rendering " + page.file.abs_src_path)
             log.debug("[jupyterlite] creating iframe with src " + iframe_src)
-            
+
             # Calculate the relative path to the toc-handler.js from this page
             # Use the same page_depth calculation as for iframe_src
             toc_handler_path = "../" * page_depth + "toc-handler.js"
-            
+
             body = f"""
             <iframe src="{iframe_src}"
                 width="100%"
