@@ -62,7 +62,7 @@ def build_site(
         log.info("[jupyterlite] running build command")
         _run_command(cmd, cwd=working_dir)
         assert output_dir.exists(), "Output directory was not created"
-        
+
         # Inject iframe scroll handler into JupyterLite
         _inject_scroll_handler(output_dir)
 
@@ -158,44 +158,40 @@ def _inject_scroll_handler(output_dir: Path) -> None:
     # Get the path to the static scroll handler file
     static_dir = Path(__file__).parent / "static"
     scroll_handler_src = static_dir / "iframe-scroll-handler.js"
-    
+
     if not scroll_handler_src.exists():
         log.warning(
             f"[jupyterlite] scroll handler script not found at {scroll_handler_src}"
         )
         return
-    
+
     # Copy the scroll handler to the jupyterlite build
     notebooks_dir = output_dir / "notebooks"
     if not notebooks_dir.exists():
-        log.warning(
-            f"[jupyterlite] notebooks directory not found at {notebooks_dir}"
-        )
+        log.warning(f"[jupyterlite] notebooks directory not found at {notebooks_dir}")
         return
-    
+
     scroll_handler_dest = notebooks_dir / "iframe-scroll-handler.js"
     shutil.copy(scroll_handler_src, scroll_handler_dest)
     log.info(f"[jupyterlite] copied scroll handler to {scroll_handler_dest}")
-    
+
     # Inject script tag into notebooks/index.html
     index_html_path = notebooks_dir / "index.html"
     if not index_html_path.exists():
-        log.warning(
-            f"[jupyterlite] index.html not found at {index_html_path}"
-        )
+        log.warning(f"[jupyterlite] index.html not found at {index_html_path}")
         return
-    
+
     html_content = index_html_path.read_text()
-    
+
     # Check if already injected
     if "iframe-scroll-handler.js" in html_content:
         log.debug("[jupyterlite] scroll handler already injected")
         return
-    
+
     # Inject the script tag before </body> using regex to handle various whitespace
     script_tag = '<script src="iframe-scroll-handler.js"></script>\n  </body>'
-    html_content = re.sub(r'\s*</body>', f'\n    {script_tag}', html_content, count=1)
-    
+    html_content = re.sub(r"\s*</body>", f"\n    {script_tag}", html_content, count=1)
+
     index_html_path.write_text(html_content)
     log.info("[jupyterlite] injected scroll handler into notebooks/index.html")
 
