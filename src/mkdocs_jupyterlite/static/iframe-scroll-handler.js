@@ -6,90 +6,101 @@
  */
 (function() {
     'use strict';
-    
-    // JupyterLite appends this character to rendered markdown headings
-    const PILCROW_CHAR = '¶';
-    
-    // Expected origin for messages (same origin as this page)
     const EXPECTED_ORIGIN = window.location.origin;
-    
     console.log('[mkdocs-jupyterlite] iframe scroll handler loaded');
-    
-    // Listen for messages from parent window
     window.addEventListener('message', function(event) {
-        // Validate the message origin for security
         if (event.origin !== EXPECTED_ORIGIN) {
             console.log('[mkdocs-jupyterlite] Ignoring message from unexpected origin:', event.origin);
             return;
         }
+        if (!event.data) {
+            console.log('[mkdocs-jupyterlite] Ignoring message with no data');
+            return;
+        }
+        if (event.data.type !== 'jupyterlite-toc-navigate') {
+            console.log('[mkdocs-jupyterlite] Ignoring message of unknown type:', event.data.type);
+            return;
+        }
         
-        if (event.data && event.data.type === 'jupyterlite-toc-navigate') {
-            const targetId = event.data.targetId;
-            const headingText = event.data.headingText;
-            console.log('[mkdocs-jupyterlite] Received scroll request for:', targetId, 'with text:', headingText);
-            
-            // Helper function to find heading by text content
-            function findHeadingByText() {
-                console.log('[mkdocs-jupyterlite] Looking for heading with text:', headingText);
-                
-                // Find all headings in the notebook
-                // Try different selectors as JupyterLite may use different structures
-                const selectors = [
-                    'h1, h2, h3, h4, h5, h6',  // Standard headings
-                    '.jp-MarkdownCell h1, .jp-MarkdownCell h2, .jp-MarkdownCell h3, .jp-MarkdownCell h4, .jp-MarkdownCell h5, .jp-MarkdownCell h6',  // JupyterLab markdown cell headings
-                    '[role="heading"]'  // ARIA role headings
-                ];
-                
-                for (const selector of selectors) {
-                    const headings = document.querySelectorAll(selector);
-                    console.log('[mkdocs-jupyterlite] Found', headings.length, 'headings with selector:', selector);
-                    for (const heading of headings) {
-                        // JupyterLite adds a pilcrow character to headings, so we need to strip it
-                        const text = heading.textContent.trim();
-                        const cleanText = text.endsWith(PILCROW_CHAR) ? text.slice(0, -1) : text;
-                        console.log('[mkdocs-jupyterlite] Comparing:', cleanText, 'with:', headingText);
-                        if (cleanText === headingText) {
-                            return heading;
-                        }
-                    }
+        const headingText = event.data.headingText;
+        console.log('[mkdocs-jupyterlite] Received scroll request for:', headingText);
+
+        // We can't use the ID's of the heading elements because jupyterlite uses a different algorithm to generate them
+        // from the mkdocs algorithm.
+        // For example, the ID of one section in the jupterlite iframe is `Installing-packages-from-PyPI`.
+        // But in the mkdocs TOC, the link href is `#installing-packages-from-pypi`.
+        
+        // If the ID's were consistent, in the iframe we could scroll to the element by ID.
+        // We also can't normalize the IDs, because in the outer page they are all
+        // lowercase, and in the inner page they are titlecase, so we can't
+        // know which words to capitalize.
+
+        // We also can't query all headings and match by text or ID, because
+        // jupyterlite does virtual rendering of the notebook (I assume for performance),
+        // so cells that are not currently visible in the viewport are not present in the DOM.
+
+        // Instead, we can leverage the JupyterLab TOC extension, which is present in JupyterLite.
+        // The TOC extension has a panel with a list of all headings in the notebook,
+        // and clicking on an entry in the TOC scrolls to the corresponding heading.
+        // So we can find the TOC entry by its title attribute, and simulate a click on it.
+
+        function findTocEntry(title) {
+            // Example TOC entry HTML:
+            // <span class="jp-tocItem-content" title="Installing packages from PyPI" data-running="-1">Installing packages from PyPI</span>
+            // We search for this span by title attribute, and then get its parent link
+            const tocSpans = Array.from(document.querySelectorAll('.jp-tocItem-content'));
+            for (const span of tocSpans) {
+                if (span.getAttribute('title') === title) {
+                    return span
                 }
-                return null;
             }
-            
-            // Try to find the heading element
-            let targetElement = findHeadingByText();
-            
-            if (targetElement) {
-                console.log('[mkdocs-jupyterlite] Found target element, scrolling...');
-                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return null;
+        }
+
+        function simulateClick(el) {
+            // We can't just call el.click() because JupyterLab uses react synthetic events.
+            const opts = { view: window, bubbles: true, cancelable: true, buttons: 1 };
+            el.dispatchEvent(new MouseEvent('mousedown', opts));
+            el.dispatchEvent(new MouseEvent('mouseup', opts));
+            el.dispatchEvent(new MouseEvent('click', opts));
+        }
+    
+        function scrollToTocEntry(title) {
+            const tocEntry = findTocEntry(title);
+            if (tocEntry) {
+                console.log('[mkdocs-jupyterlite] Found TOC entry, simulating click to scroll:', title);
+                simulateClick(tocEntry);
+                return true;
             } else {
-                // If not found immediately, wait for notebook to fully load and try again
-                console.log('[mkdocs-jupyterlite] Target element not found, waiting for notebook to load...');
-                
-                // Use MutationObserver to watch for when the notebook content is added
-                const observer = new MutationObserver(function(mutations, obs) {
-                    const element = findHeadingByText();
-                    if (element) {
-                        console.log('[mkdocs-jupyterlite] Found target element after mutation, scrolling...');
-                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        obs.disconnect();
-                    }
-                });
-                
-                // Start observing the document for changes
-                observer.observe(document.body, {
-                    childList: true,
-                    subtree: true
-                });
-                
-                // Stop observing after 10 seconds to avoid memory leaks
-                setTimeout(function() {
-                    observer.disconnect();
-                    console.log('[mkdocs-jupyterlite] Stopped waiting for target element');
-                }, 10000);
+                console.log('[mkdocs-jupyterlite] TOC entry not found for title:', title);
+                return false;
             }
         }
+        let success = scrollToTocEntry(headingText);
+        if (success) {
+            console.log('[mkdocs-jupyterlite] Found target element via TOC, no further action needed');
+        } else {
+            // If not found immediately, wait for notebook to fully load and try again
+            console.log('[mkdocs-jupyterlite] Target element not found, waiting for notebook to load...');
+            const observer = new MutationObserver(function(mutations, obs) {
+                const success = scrollToTocEntry(headingText);
+                if (success) {
+                    console.log('[mkdocs-jupyterlite] Found target element via TOC after mutation, scrolling...');
+                    obs.disconnect();
+                    return;
+                }
+            });
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            // Stop observing after 10 seconds to avoid memory leaks
+            setTimeout(function() {
+                observer.disconnect();
+                console.log('[mkdocs-jupyterlite] Stopped waiting for target element');
+            }, 10000);
+        }
+        
     });
-    
     console.log('[mkdocs-jupyterlite] Message listener attached');
 })();
