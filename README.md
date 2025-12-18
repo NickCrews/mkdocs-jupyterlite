@@ -3,7 +3,7 @@
 
 A MkDocs plugin for embedding interactive notebooks in your docs via jupyterlite.
 
-![Screenshot of a JupyterLite notebook embedded in MkDocs](https://raw.githubusercontent.com/NickCrews/mkdocs-jupyterlite/main/docs/assets/screenshot.jpg)
+![Recording of a JupyterLite notebook embedded in MkDocs](https://raw.githubusercontent.com/NickCrews/mkdocs-jupyterlite/main/docs/assets/recording.gif)
 
 Say you have a notebook `example.ipynb` in your awesome project, and you want
 users to be able to play around with it.
@@ -145,6 +145,6 @@ to use this in your site, but run into any problems.
 Possible improvements:
 
 - [x] Include custom python wheels into the JupyterLite environment.
+- [x] Fix the TOC so clicking headers actually scrolls in the iframe.
 - [ ] Passing an entire jupyter-lite.json config file.
 - [ ] Instead of using an iframe, actually inline the contents of the generated HTML?
-- [ ] Fix the TOC so clicking headers actually scrolls in the iframe.
