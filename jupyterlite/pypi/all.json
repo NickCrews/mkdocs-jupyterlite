@@ -16,8 +16,8 @@
           "python_version": "py3",
           "requires_python": ">=3.8",
           "size": 25560,
-          "upload_time": "2026-07-03T21:36:21.704877Z",
-          "upload_time_iso_8601": "2026-07-03T21:36:21.704877Z",
+          "upload_time": "2026-07-03T21:42:30.145746Z",
+          "upload_time_iso_8601": "2026-07-03T21:42:30.145746Z",
           "url": "./cowsay-6.1-py3-none-any.whl",
           "yanked": false,
           "yanked_reason": null
@@ -68,8 +68,8 @@
           "python_version": "py3",
           "requires_python": null,
           "size": 1350,
-          "upload_time": "2026-07-03T21:36:21.743529Z",
-          "upload_time_iso_8601": "2026-07-03T21:36:21.743529Z",
+          "upload_time": "2026-07-03T21:42:30.208360Z",
+          "upload_time_iso_8601": "2026-07-03T21:42:30.208360Z",
           "url": "./package_not_on_pypi-0.1.0-py3-none-any.whl",
           "yanked": false,
           "yanked_reason": null
