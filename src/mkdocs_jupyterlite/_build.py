@@ -151,7 +151,7 @@ def _get_wheel_urls(
                     file_name = wheel.name
                     dst = shutil.copy(wheel, wheels_dir / file_name)
                     log.debug(f"[jupyterlite] including wheel URL: {file_name}")
-                    wheel_urls.append(str(dst.absolute()))
+                    wheel_urls.append(str(Path(dst).absolute()))
     return wheel_urls
 
 

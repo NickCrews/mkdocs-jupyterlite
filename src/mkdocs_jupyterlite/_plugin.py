@@ -6,7 +6,7 @@ import shutil
 import tempfile
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 import gitmatch
 import markdown
@@ -55,10 +55,6 @@ class JupyterlitePluginConfig(BaseConfig):
 class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
     def __init__(self):
         super().__init__()
-        if isinstance(self.config, dict):
-            plugin_config = JupyterlitePluginConfig()
-            plugin_config.load_dict(self.config)
-            self.config = plugin_config
         self._jupyterlite_build_dir = tempfile.TemporaryDirectory()
         self._did_build_jupyterlite = False
 
@@ -105,7 +101,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
 
         _build.build_site(
             docs_dir=Path(config.docs_dir),
-            notebook_relative_paths=notebook_relative_paths,
+            notebook_relative_paths=[Path(p) for p in notebook_relative_paths],
             wheel_sources=self.config.wheels,
             output_dir=Path(self._jupyterlite_build_dir.name),
         )
@@ -126,7 +122,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
         iframe_src = f"{jupyterlite_path}/notebooks/index.html?path={page.file.src_uri}"
 
         def new_render(self: Page, config: MkDocsConfig, files: Files) -> None:
-            log.debug("[jupyterlite] rendering " + page.file.abs_src_path)
+            log.debug(f"[jupyterlite] rendering {page.file.abs_src_path}")
             log.debug("[jupyterlite] creating iframe with src " + iframe_src)
 
             # Calculate the relative path to the toc-handler.js from this page
@@ -143,7 +139,14 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             <script src="{toc_handler_path}"></script>
             """
             self.content = body
-            toc, title_in_notebook = get_nb_toc_and_title(page.file.abs_src_path)
+            src_path = page.file.abs_src_path
+            if src_path is None:
+                log.warning(
+                    "[jupyterlite] notebook source path is missing; skipping TOC"
+                )
+                self.toc = get_toc([])
+                return
+            toc, title_in_notebook = get_nb_toc_and_title(src_path)
             log.debug("[jupyterlite] TOC: " + str(toc))
             log.debug("[jupyterlite] title in notebook: " + str(title_in_notebook))
             log.debug("[jupyterlite] page title: " + str(self.title))
@@ -218,7 +221,7 @@ def get_nb_toc_and_title(path: str | Path) -> tuple[TableOfContents, str | None]
         ]
     )
     md.convert(markdown_source)
-    toc_tokens: list[_TocToken] = md.toc_tokens  # type: ignore[attr-defined]
+    toc_tokens = cast(list[_TocToken], getattr(md, "toc_tokens", []))
     log.debug("[jupyterlite] extracted TOC tokens: " + json.dumps(toc_tokens, indent=2))
     toc = get_toc(toc_tokens)
     title = None
