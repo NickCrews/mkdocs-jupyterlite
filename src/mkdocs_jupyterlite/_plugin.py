@@ -60,6 +60,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             plugin_config.load_dict(self.config)
             self.config = plugin_config
         self._jupyterlite_build_dir = tempfile.TemporaryDirectory()
+        self._did_build_jupyterlite = False
 
     def _cleanup(self) -> None:
         log.info(
@@ -85,6 +86,10 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
                 log.debug("[jupyterlite] ignoring file: " + str(file.src_uri))
                 outfiles.append(file)
 
+        if not notebook_relative_paths:
+            log.info("[jupyterlite] no notebooks matched; skipping JupyterLite build")
+            return Files(outfiles)
+
         # Add the TOC handler JavaScript to the site files
         static_dir = Path(__file__).parent / "static"
         toc_handler_path = static_dir / "toc-handler.js"
@@ -104,6 +109,7 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
             wheel_sources=self.config.wheels,
             output_dir=Path(self._jupyterlite_build_dir.name),
         )
+        self._did_build_jupyterlite = True
         return Files(outfiles)
 
     def on_pre_page(
@@ -150,11 +156,12 @@ class JupyterlitePlugin(BasePlugin[JupyterlitePluginConfig]):
         return page
 
     def on_post_build(self, config: MkDocsConfig) -> None:
-        shutil.copytree(
-            self._jupyterlite_build_dir.name,
-            Path(config.site_dir) / "jupyterlite",
-            dirs_exist_ok=True,
-        )
+        if self._did_build_jupyterlite:
+            shutil.copytree(
+                self._jupyterlite_build_dir.name,
+                Path(config.site_dir) / "jupyterlite",
+                dirs_exist_ok=True,
+            )
         self._cleanup()
 
     def on_build_error(self, *, error: Exception) -> None:

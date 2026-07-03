@@ -33,11 +33,13 @@ def build_site(
     with _get_src_dir() as working_dir:
         log.debug(f"[jupyterlite] using working dir: {working_dir}")
         _write_jupyter_lite_json(working_dir)
+        files_dir = working_dir / "files"
+        files_dir.mkdir(parents=True, exist_ok=True)
         wheels_dir = working_dir / "wheels"
         wheel_urls = _get_wheel_urls(wheels_dir, wheel_sources)
         for notebook in notebook_relative_paths:
             src = docs_dir / notebook
-            dst = working_dir / "files" / notebook
+            dst = files_dir / notebook
             dst.parent.mkdir(parents=True, exist_ok=True)
             log.debug(f"[jupyterlite] copying {src} to build {dst}")
             shutil.copy(src, dst)
